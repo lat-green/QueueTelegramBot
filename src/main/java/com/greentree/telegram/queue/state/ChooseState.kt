@@ -1,6 +1,5 @@
 package com.greentree.telegram.queue.state
 
-import com.greentree.telegram.queue.bot.ChatSender
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup

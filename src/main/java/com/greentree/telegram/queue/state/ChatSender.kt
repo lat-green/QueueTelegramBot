@@ -1,4 +1,4 @@
-package com.greentree.telegram.queue.bot
+package com.greentree.telegram.queue.state
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
