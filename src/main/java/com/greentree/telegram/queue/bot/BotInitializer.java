@@ -1,4 +1,4 @@
-package com.greentree.example.telegram;
+package com.greentree.telegram.queue.bot;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -28,7 +28,7 @@ public class BotInitializer {
         } catch (TelegramApiException e) {
         }
     }
-    
+
     @PreDestroy
     public void terminate() throws TelegramApiException {
         session.stop();

@@ -1,6 +1,6 @@
-package com.greentree.example.telegram.repository;
+package com.greentree.telegram.queue.repository;
 
-import com.greentree.example.telegram.model.Client;
+import com.greentree.telegram.queue.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

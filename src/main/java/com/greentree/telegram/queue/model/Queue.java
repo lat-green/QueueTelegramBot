@@ -1,4 +1,4 @@
-package com.greentree.example.telegram.model;
+package com.greentree.telegram.queue.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,12 +8,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "client")
+@Entity(name = "Queue")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+public class Queue {
 
     @Id
     @GeneratedValue

@@ -1,4 +1,4 @@
-package com.greentree.example.telegram;
+package com.greentree.telegram.queue;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
