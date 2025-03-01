@@ -2,6 +2,7 @@ package com.greentree.telegram.queue.bot
 
 import com.greentree.telegram.queue.repository.QueueRepository
 import com.greentree.telegram.queue.state.ChatState
+import com.greentree.telegram.queue.state.ChooseState
 import com.greentree.telegram.queue.state.StateProvider
 import org.springframework.stereotype.Component
 
@@ -11,6 +12,13 @@ class ChoosingQueueStateProvider(
 ) : StateProvider {
 
 	override fun findOrNull(stateName: String): ChatState? {
-		TODO("Not yet implemented")
+		if (stateName == "begin") return null
+
+		val queues = mutableMapOf<String, String?>()
+
+		for (queue in repository.findAll())
+			queues[queue.name] = "queue:" + queue.id
+		val choosingQueueState = ChooseState("Выберете предмет", queues)
+		return choosingQueueState
 	}
 }
