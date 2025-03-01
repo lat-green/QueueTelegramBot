@@ -1,7 +1,7 @@
 package com.greentree.telegram.queue.bot
 
+import com.greentree.telegram.queue.provider.StateProvider
 import com.greentree.telegram.queue.state.ChatState
-import com.greentree.telegram.queue.state.StateProvider
 import lombok.extern.slf4j.Slf4j
 import org.hibernate.query.sqm.tree.SqmNode.*
 import org.springframework.stereotype.Component
@@ -42,44 +42,44 @@ data class StateTelegramBot(
 	@Throws(TelegramApiException::class)
 	private fun onMessage(message: Message) {
 		val chatId = message.chatId
-		var currentStateInfo = states.remove(chatId) ?: begin()
+		var currentStateInfo = states.remove(chatId) ?: begin(chatId)
 		val (_, state) = currentStateInfo
 		var nextStateName = state.onMessage(this, message)
 		val nextStateInfo: StateInfo
 		if(nextStateName != null) {
-			nextStateInfo = find(nextStateName)
+			nextStateInfo = find(chatId, nextStateName)
 			states[chatId] = nextStateInfo
 		} else {
 			nextStateInfo = currentStateInfo
 		}
-		nextStateInfo.state.init(this, chatId)
+		nextStateInfo.state.init(withChatId(chatId))
 	}
 
 	@Throws(TelegramApiException::class)
 	private fun onCallback(query: CallbackQuery) {
 		val chatId = query.message.chatId
-		var currentStateInfo = states.remove(chatId) ?: begin()
+		var currentStateInfo = states.remove(chatId) ?: begin(chatId)
 		val (_, state) = currentStateInfo
 		var nextStateName = state.onCallback(this, query)
 		val nextStateInfo: StateInfo
 		if(nextStateName != null) {
-			nextStateInfo = find(nextStateName)
+			nextStateInfo = find(chatId, nextStateName)
 			states[chatId] = nextStateInfo
 		} else {
 			nextStateInfo = currentStateInfo
 		}
-		nextStateInfo.state.init(this, chatId)
+		nextStateInfo.state.init(withChatId(chatId))
 	}
 
-	private fun begin() = find("begin")
+	private fun begin(chatId: Long) = find(chatId, "begin")
 
-	private fun find(stateName: String): StateInfo {
+	private fun find(chatId: Long, stateName: String): StateInfo {
 		val state = stateProviders.asSequence().mapNotNull {
-			it.findOrNull(this, stateName)
+			it.findOrNull(withChatId(chatId), stateName)
 		}.singleOrNull() ?: run {
 			if(stateName != "begin") {
 				log.error("state $stateName not found or duplicate")
-				return begin()
+				return begin(chatId)
 			} else {
 				TODO(stateName)
 			}

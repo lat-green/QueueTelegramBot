@@ -1,5 +1,7 @@
 package com.greentree.telegram.queue.state
 
+import com.greentree.telegram.queue.bot.ChatSender
+import com.greentree.telegram.queue.bot.send
 import lombok.extern.slf4j.Slf4j
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
@@ -14,7 +16,7 @@ data class StartRequestState(val nextState: String) : ChatState {
 		return null
 	}
 
-	override fun init(sender: AbsSender, chatId: Long) {
-		ChatState.send(sender, chatId, "Введите /start")
+	override fun init(sender: ChatSender) {
+		sender.send("Введите /start")
 	}
 }
