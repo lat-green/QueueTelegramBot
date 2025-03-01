@@ -18,14 +18,11 @@ interface ChatState {
 	}
 
 	fun init(sender: AbsSender, chatId: Long)
+}
 
-	companion object {
-
-		fun send(sender: AbsSender, chatId: Long, text: String) {
-			val m = SendMessage()
-			m.setChatId(chatId)
-			m.text = text
-			sender.execute(m)
-		}
-	}
+fun AbsSender.send(chatId: Long, text: String): Message? {
+	val message = SendMessage()
+	message.setChatId(chatId)
+	message.text = text
+	return execute(message)
 }

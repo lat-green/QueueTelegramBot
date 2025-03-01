@@ -75,7 +75,7 @@ data class StateTelegramBot(
 
 	private fun find(stateName: String): StateInfo {
 		val state = stateProviders.asSequence().mapNotNull {
-			it.findOrNull(stateName)
+			it.findOrNull(this, stateName)
 		}.singleOrNull() ?: run {
 			if(stateName != "begin") {
 				log.error("state $stateName not found or duplicate")
