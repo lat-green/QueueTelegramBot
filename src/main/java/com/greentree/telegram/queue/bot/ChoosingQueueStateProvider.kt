@@ -7,16 +7,15 @@ import com.greentree.telegram.queue.state.StateProvider
 import org.springframework.stereotype.Component
 
 @Component
-class ChoosingQueueStateProvider(
+data class ChoosingQueueStateProvider(
 	val repository: QueueRepository,
 ) : StateProvider {
 
 	override fun findOrNull(stateName: String): ChatState? {
-		if (stateName == "begin") return null
-
+		if(stateName != "choosing-queue") return null
 		val queues = mutableMapOf<String, String?>()
 
-		for (queue in repository.findAll())
+		for(queue in repository.findAll())
 			queues[queue.name] = "queue:" + queue.id
 		val choosingQueueState = ChooseState("Выберете предмет", queues)
 		return choosingQueueState
