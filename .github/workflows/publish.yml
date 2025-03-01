@@ -1,0 +1,20 @@
+name: Publish package to GitHub Packages
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish to GitHub Packages
+        run: mvn --batch-mode deploy -f Commons
+        env:
+          GITHUB_ACTOR: ara2003
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}

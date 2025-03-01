@@ -1,0 +1,15 @@
+theme:build:
+  - ".github/**"
+  - "**/pom.xml"
+  - ".gitignore"
+  - ".gitattributes"
+
+theme:code:
+  - "**/src/main/*"
+
+theme:tests:
+  - "**/src/test/*"
+
+theme:documentation:
+  - "**/docs/**"
+  
