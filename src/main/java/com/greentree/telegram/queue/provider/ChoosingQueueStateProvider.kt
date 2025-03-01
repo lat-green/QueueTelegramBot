@@ -1,4 +1,4 @@
-package com.greentree.telegram.queue.bot
+package com.greentree.telegram.queue.provider
 
 import com.greentree.telegram.queue.repository.QueueRepository
 import com.greentree.telegram.queue.state.ChatState

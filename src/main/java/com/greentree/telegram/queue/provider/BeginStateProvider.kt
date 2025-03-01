@@ -1,4 +1,4 @@
-package com.greentree.telegram.queue.bot
+package com.greentree.telegram.queue.provider
 
 import com.greentree.telegram.queue.state.ChatState
 import com.greentree.telegram.queue.state.StartRequestState
@@ -10,6 +10,6 @@ class BeginStateProvider : StateProvider {
 
 	override fun findOrNull(stateName: String): ChatState? {
 		if(stateName != "begin") return null
-		return StartRequestState("choosing-queue")
+		return StartRequestState("main-menu")
 	}
 }
