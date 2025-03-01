@@ -88,7 +88,12 @@ data class StateTelegramBot(
 		}
 		return when(response) {
 			is ChatState -> StateInfo(stateName, response)
-			is Redirect -> find(chatId, response.nextStateName)
+			is Redirect -> {
+				if(response.nextStateName != stateName)
+					find(chatId, response.nextStateName)
+				else
+					TODO(stateName)
+			}
 		}
 	}
 
