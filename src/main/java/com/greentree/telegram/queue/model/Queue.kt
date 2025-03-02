@@ -1,16 +1,17 @@
-package com.greentree.telegram.queue.model
+package com.greentree.telegram.queue.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
-import java.io.Serializable
+import lombok.Data
 
 @Entity(name = "Queue")
+@Data
 data class Queue @JvmOverloads constructor(
 	@Column
 	var name: String = "",
 	@Id
 	@GeneratedValue
 	var id: Long? = null,
-) : Serializable
+)

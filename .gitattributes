@@ -1,2 +1,5 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+* text=Auto
+
+pom.xml text eol=lf
+*.kt text eol=lf
+*.java text eol=lf
