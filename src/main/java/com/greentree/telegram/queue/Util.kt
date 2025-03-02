@@ -5,18 +5,15 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
-fun createInlineKeyboard(text: String, nextStates: Map<String, String?>, sender: ChatSender){
-    val keyboard = InlineKeyboardMarkup()
-    val first_row: MutableList<InlineKeyboardButton> = ArrayList()
-    val buttons = java.util.List.of<List<InlineKeyboardButton>>(first_row)
-    for(name in nextStates.keys) {
-        val button = InlineKeyboardButton()
-        button.text = name
-        button.callbackData = name
-        first_row.add(button)
-    }
-    keyboard.keyboard = buttons
-    val send = SendMessage(sender.chatId.toString(), text)
-    send.replyMarkup = keyboard
-    sender.sender.execute(send)
+fun createInlineKeyboard(text: String, buttons: Iterable<String>, sender: ChatSender) {
+	val keyboard = InlineKeyboardMarkup()
+	keyboard.keyboard = listOf(buttons.map { text ->
+		val button = InlineKeyboardButton()
+		button.text = text
+		button.callbackData = text
+		button
+	})
+	val send = SendMessage(sender.chatId.toString(), text)
+	send.replyMarkup = keyboard
+	sender.sender.execute(send)
 }

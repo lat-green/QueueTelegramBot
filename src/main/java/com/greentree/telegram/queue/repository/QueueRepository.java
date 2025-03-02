@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface QueueRepository extends JpaRepository<Queue, Long> {
     public Optional<Queue> findByName(String name);
+    public void deleteByName(String name);
 }

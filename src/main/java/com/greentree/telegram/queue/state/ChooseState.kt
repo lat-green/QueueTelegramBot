@@ -1,10 +1,7 @@
 package com.greentree.telegram.queue.state
 
 import com.greentree.telegram.queue.createInlineKeyboard
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.bots.AbsSender
 
 @JvmRecord
@@ -12,12 +9,13 @@ data class ChooseState(val text: String, val nextStates: Map<String, String?>) :
 
 	override fun onCallback(sender: AbsSender, query: CallbackQuery): String? {
 		val text = query.data
-		if(nextStates.containsKey(text))
+		if(nextStates.containsValue(text))
 			return nextStates[text]
-		TODO("$sender $query")
+		sender.send(query.message.chatId, "Выберите одно из представленных действий")
+		return null
 	}
 
 	override fun init(sender: ChatSender) {
-		createInlineKeyboard(text, nextStates, sender)
+		createInlineKeyboard(text, nextStates.keys, sender)
 	}
 }
