@@ -21,9 +21,6 @@ class InQueueState(
 	val nextState: String
 ) : ChatState {
 
-	val queue = queueRepository.findById(queueId).orElseThrow()
-	val positions = positionRepository.findAllByQueue(queue)
-
 	enum class Actions(val text: String) {
 		ENQUEUEFIRSTFREE("Занять"),
 		ENQUEUEBYNUMBER("Занять по месту"),
@@ -31,19 +28,7 @@ class InQueueState(
 	}
 
 	override fun init(sender: ChatSender) {
-		positions.sortBy { it.number }
-		val builder = StringBuilder()
-		builder.append(queue.name)
-		builder.append('\n')
-		for(position in positions) {
-			builder.append(position.number)
-			builder.append(")")
-			builder.append(position.client!!.name)
-			builder.append('\n')
-		}
-		sender.send(builder.toString())
-		if(positions.isEmpty())
-			sender.send("Очередь пуста")
+		sender.send(mainService.getQueuePeople(queueId))
 		createInlineKeyboard(
 			"Выберете действие",
 			Actions.entries.map { it.text },
@@ -53,33 +38,18 @@ class InQueueState(
 
 	override fun onCallback(sender: AbsSender, query: CallbackQuery): String {
 		val text = query.data
-		val client = clientRepository.findByChatId(query.message.chatId).orElseThrow()
 		when(Actions.entries.first { it.text == text }) {
 			Actions.DEQUEUE -> {
-				if(isClientInQueue(positions, client)) {
-					mainService.dequeue(queueId, client.id!!)
-				} else {
+				if(!mainService.dequeue(query.message.chatId, queueId))
 					sender.send(query.message.chatId, "Вы не находитесь в очереди")
-				}
 			}
-
 			Actions.ENQUEUEFIRSTFREE -> {
-				if(!isClientInQueue(positions, client)) {
-					mainService.enqueue(client.id!!, queueId)
-				} else {
+				if(!mainService.enqueue(query.message.chatId, queueId))
 					sender.send(query.message.chatId, "Вы уже в очереди")
-				}
 			}
 
 			Actions.ENQUEUEBYNUMBER -> return "enqueue-by-number"
 		}
 		return nextState
-	}
-
-	fun isClientInQueue(positions: List<Position>, client: Client): Boolean {
-		for(position in positions)
-			if(position.client == client)
-				return true
-		return false
 	}
 }
