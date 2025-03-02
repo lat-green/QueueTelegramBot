@@ -9,7 +9,7 @@ data class ChooseState(val text: String, val nextStates: Map<String, String?>) :
 
 	override fun onCallback(sender: AbsSender, query: CallbackQuery): String? {
 		val text = query.data
-		if(nextStates.containsValue(text))
+		if(nextStates.containsKey(text))
 			return nextStates[text]
 		sender.send(query.message.chatId, "Выберите одно из представленных действий")
 		return null
