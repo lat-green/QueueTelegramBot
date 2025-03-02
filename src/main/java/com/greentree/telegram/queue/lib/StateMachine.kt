@@ -50,28 +50,27 @@ data class StateMachine(
 		}
 	}
 
-	private fun onMessage(sender: AbsSender, message: Message) {
-		val chatId = message.chatId
-		val currentState = states.remove(chatId) ?: begin()
-		val nextStateName = currentState.onMessage(methodCaller, sender, message)
+	private tailrec fun resolveNextState(sender: AbsSender, chatId: Long, nextStateName: String?) {
 		if(nextStateName != null) {
 			val nextStateInfo = find(nextStateName)
 			states[chatId] = nextStateInfo
 			val a = nextStateInfo.init(methodCaller, sender.withChatId(chatId))
-			require(a == null)
+			resolveNextState(sender, , chatId, a)
 		}
+	}
+
+	private fun onMessage(sender: AbsSender, message: Message) {
+		val chatId = message.chatId
+		val currentState = states.remove(chatId) ?: begin()
+		val nextStateName = currentState.onMessage(methodCaller, sender, message)
+		resolveNextState(sender, chatId, nextStateName)
 	}
 
 	private fun onCallback(sender: AbsSender, query: CallbackQuery) {
 		val chatId = query.message.chatId
 		val currentState = states.remove(chatId) ?: begin()
 		val nextStateName = currentState.onCallback(methodCaller, sender, query)
-		if(nextStateName != null) {
-			val nextStateInfo = find(nextStateName)
-			states[chatId] = nextStateInfo
-			val a = nextStateInfo.init(methodCaller, sender.withChatId(chatId))
-			require(a == null)
-		}
+		resolveNextState(sender, chatId, nextStateName)
 	}
 
 	private fun begin() = find("begin")
