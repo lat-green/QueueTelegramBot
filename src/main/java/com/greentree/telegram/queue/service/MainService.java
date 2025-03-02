@@ -168,4 +168,10 @@ public class MainService {
         return clientRepository.findByChatId(chatId).orElseThrow();
     }
 
+    public void rename(String newName, long chatId){
+        Client client = clientRepository.findByChatId(chatId).orElseThrow();
+
+        client.setName(newName);
+        clientRepository.save(client);
+    }
 }

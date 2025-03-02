@@ -13,7 +13,6 @@ class EnqueueByNumberState(
 	val clientRepository: ClientRepository,
 	val mainService: MainService,
 	val queueId: Long,
-	val clientId: Long,
 	val nextState: String
 ) : ChatState {
 
@@ -27,7 +26,7 @@ class EnqueueByNumberState(
 
 	override fun onMessage(sender: AbsSender, message: Message): String {
 		val text = message.text
-		val number = text.toInt() - 1
+		val number = text.toInt()
 		val output = mainService.enqueueByNumber(message.chatId, queueId, number)
 		if(!output.left)
 			sender.send(message.chatId, output.right)

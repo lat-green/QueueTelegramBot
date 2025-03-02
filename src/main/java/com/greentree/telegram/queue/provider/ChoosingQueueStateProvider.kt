@@ -4,8 +4,6 @@ import com.greentree.telegram.queue.repository.QueueRepository
 import com.greentree.telegram.queue.service.MainService
 import com.greentree.telegram.queue.state.*
 import org.springframework.stereotype.Component
-import org.telegram.telegrambots.meta.api.objects.Chat
-import org.telegram.telegrambots.meta.bots.AbsSender
 
 @Component
 data class ChoosingQueueStateProvider(
@@ -24,6 +22,6 @@ data class ChoosingQueueStateProvider(
 			sender.send("Очередей нет")
 			return redirect("main-menu")
 		}
-		return ChooseState("Выберете предмет", queues)
+		return SortedChooseState("Выберете очередь", queues)
 	}
 }
