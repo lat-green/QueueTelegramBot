@@ -1,6 +1,7 @@
 package com.greentree.telegram.queue.provider
 
 import com.greentree.telegram.queue.repository.ClientRepository
+import com.greentree.telegram.queue.service.MainService
 import com.greentree.telegram.queue.state.ChatSender
 import com.greentree.telegram.queue.state.ChatState
 import com.greentree.telegram.queue.state.ChooseState
@@ -9,12 +10,12 @@ import org.springframework.stereotype.Component
 import kotlin.jvm.optionals.getOrElse
 
 @Component
-class MainMenuStateProvider (val repository: ClientRepository) : StateProvider {
+class MainMenuStateProvider (val mainService: MainService) : StateProvider {
 
 	override fun findOrNull(sender: ChatSender, stateName: String): ChatState? {
 		if(stateName != "main-menu") return null
 
-		val client = repository.findByChatId(sender.chatId).getOrElse { TODO() }
+		val client = mainService.findClientByChatId(sender.chatId)
 
 		var buttons = mutableMapOf("Очереди" to "choosing-queue")
 		if (client.isAdmin){
