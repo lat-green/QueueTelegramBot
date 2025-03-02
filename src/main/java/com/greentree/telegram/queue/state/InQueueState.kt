@@ -1,8 +1,8 @@
 package com.greentree.telegram.queue.state
 
 import com.greentree.telegram.queue.createInlineKeyboard
-import com.greentree.telegram.queue.entity.Client
-import com.greentree.telegram.queue.entity.Position
+import com.greentree.telegram.queue.model.Client
+import com.greentree.telegram.queue.model.Position
 import com.greentree.telegram.queue.repository.ClientRepository
 import com.greentree.telegram.queue.repository.PositionRepository
 import com.greentree.telegram.queue.repository.QueueRepository

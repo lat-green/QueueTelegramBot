@@ -110,6 +110,14 @@
             <groupId>com.greentree.commons</groupId>
             <artifactId>util</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.greentree.commons</groupId>
+            <artifactId>reflection</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.greentree.commons</groupId>
+            <artifactId>annotation</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

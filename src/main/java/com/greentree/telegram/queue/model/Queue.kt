@@ -1,4 +1,4 @@
-package com.greentree.telegram.queue.entity
+package com.greentree.telegram.queue.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

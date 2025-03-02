@@ -1,6 +1,6 @@
 package com.greentree.telegram.queue.state
 
-import com.greentree.telegram.queue.entity.Client
+import com.greentree.telegram.queue.model.Client
 import com.greentree.telegram.queue.repository.ClientRepository
 import lombok.extern.slf4j.Slf4j
 import org.telegram.telegrambots.meta.api.objects.Message

@@ -1,6 +1,6 @@
 package com.greentree.telegram.queue.state
 
-import com.greentree.telegram.queue.entity.Queue
+import com.greentree.telegram.queue.model.Queue
 import com.greentree.telegram.queue.repository.QueueRepository
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
