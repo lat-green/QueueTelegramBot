@@ -1,15 +1,16 @@
 package com.greentree.telegram.queue.state
 
-import com.greentree.telegram.queue.model.Queue
 import com.greentree.telegram.queue.repository.QueueRepository
 import com.greentree.telegram.queue.service.MainService
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 
-class CreateQueueState(val repository: QueueRepository, val mainService: MainService, val nextState: String) : ChatState {
+class CreateQueueState(val repository: QueueRepository, val mainService: MainService, val nextState: String) :
+	ChatState {
 
-	override fun init(sender: ChatSender) {
+	override fun init(sender: ChatSender): String? {
 		sender.send("Отправь название очереди")
+		return null
 	}
 
 	override fun onMessage(sender: AbsSender, message: Message): String {

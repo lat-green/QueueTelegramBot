@@ -17,7 +17,7 @@ interface ChatState : StateProvider.Response {
 		return "begin"
 	}
 
-	fun init(sender: ChatSender)
+	fun init(sender: ChatSender): String?
 }
 
 fun AbsSender.send(chatId: Long, text: String): Message? {

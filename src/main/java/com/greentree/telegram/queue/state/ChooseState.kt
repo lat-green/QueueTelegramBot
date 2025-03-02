@@ -15,7 +15,8 @@ data class ChooseState(val text: String, val nextStates: Map<String, String?>) :
 		return null
 	}
 
-	override fun init(sender: ChatSender) {
+	override fun init(sender: ChatSender): String? {
 		createInlineKeyboard(text, nextStates.keys, sender)
+		return null
 	}
 }

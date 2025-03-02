@@ -7,7 +7,7 @@ import com.greentree.telegram.queue.lib.StateMachine.*
 import com.greentree.telegram.queue.lib.argument.MapArgumentResolver
 import com.greentree.telegram.queue.lib.argument.MethodCaller
 import com.greentree.telegram.queue.state.ChatSender
-import com.greentree.telegram.queue.state.Redirect
+import com.greentree.telegram.queue.state.RedirectException
 import com.greentree.telegram.queue.state.send
 import com.greentree.telegram.queue.state.withChatId
 import lombok.extern.slf4j.Slf4j
@@ -99,7 +99,7 @@ data class StateMachine(
 		private fun result(sender: ChatSender, block: () -> Any?): String? {
 			val result = try {
 				block()
-			} catch(e: Redirect) {
+			} catch(e: RedirectException) {
 				return e.nextStateName
 			}
 			when(result) {
