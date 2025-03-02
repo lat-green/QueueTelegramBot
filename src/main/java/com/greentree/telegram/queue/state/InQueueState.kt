@@ -11,9 +11,6 @@ import org.telegram.telegrambots.meta.bots.AbsSender
 
 @Transactional
 class InQueueState(
-	val positionRepository: PositionRepository,
-	val queueRepository: QueueRepository,
-	val clientRepository: ClientRepository,
 	val mainService: MainService,
 	val queueId: Long,
 	val nextState: String
@@ -38,15 +35,9 @@ class InQueueState(
 	override fun onCallback(sender: AbsSender, query: CallbackQuery): String {
 		val text = query.data
 		when(Actions.entries.first { it.text == text }) {
-			Actions.DEQUEUE -> {
-				if(!mainService.dequeue(query.message.chatId, queueId))
-					sender.send(query.message.chatId, "Вы не находитесь в очереди")
-			}
+			Actions.DEQUEUE -> return "dequeue-queue:$queueId"
 
-			Actions.ENQUEUEFIRSTFREE -> {
-				if(!mainService.enqueue(query.message.chatId, queueId))
-					sender.send(query.message.chatId, "Вы уже в очереди")
-			}
+			Actions.ENQUEUEFIRSTFREE -> return "enqueue-first-free-queue:$queueId"
 
 			Actions.ENQUEUEBYNUMBER -> return "enqueue-by-number-queue:$queueId"
 		}

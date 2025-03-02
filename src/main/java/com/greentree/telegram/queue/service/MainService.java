@@ -42,7 +42,7 @@ public class MainService {
         return false;
     }
 
-    public boolean enqueue(long chatId, long queueId) {
+    public void enqueue(long chatId, long queueId) {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
@@ -53,9 +53,7 @@ public class MainService {
             position.setQueue(queue);
             position.setNumber(number);
             positionRepository.save(position);
-            return true;
         }
-        return false;
     }
 
     private int findFirstFreeNumber(List<Position> positions) {
@@ -68,27 +66,20 @@ public class MainService {
         return positions.size();
     }
 
-    public Pair<Boolean, String> enqueueByNumber(long chatId, long queueId, int number) {
-        Boolean isDone = false;
-        String errorDescription = "";
+    public boolean enqueueByNumber(long chatId, long queueId, int number) {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
-        if (!isClientInQueue(positions, client)) {
-            if (isNumberFree(positions, number)) {
-                Position position = new Position();
-                position.setClient(client);
-                position.setQueue(queue);
-                position.setNumber(number);
-                positionRepository.save(position);
-                isDone = true;
-            } else {
-                errorDescription = "Место занято";
-            }
-        } else {
-            errorDescription = "Вы уже в очереди";
+
+        if (isNumberFree(positions, number)) {
+            Position position = new Position();
+            position.setClient(client);
+            position.setQueue(queue);
+            position.setNumber(number);
+            positionRepository.save(position);
+            return true;
         }
-        return Pair.of(isDone, errorDescription);
+        return false;
     }
 
     private boolean isNumberFree(List<Position> positions, int number) {

@@ -8,13 +8,13 @@ import com.greentree.telegram.queue.state.*
 import org.springframework.stereotype.Component
 
 @Component
-class InQueueStateProvider(val mainService: MainService) : StateProvider {
+class DequeueStateProvider(val mainService: MainService) : StateProvider {
 
 	override fun findOrNull(sender: ChatSender, stateName: String): ChatState? {
-		if(!stateName.startsWith("queue:"))
+		if(!stateName.startsWith("dequeue-queue:"))
 			return null
 
-		val queueId = stateName.substring("queue:".length).toLong()
-		return InQueueState(mainService, queueId, "main-menu")
+		val queueId = stateName.substring("dequeue-queue:".length).toLong()
+		return DequeueState(mainService, queueId, "main-menu")
 	}
 }

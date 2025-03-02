@@ -8,15 +8,12 @@ import com.greentree.telegram.queue.state.*
 import org.springframework.stereotype.Component
 
 @Component
-class EnqueueByNumberStateProvider(val positionRepository: PositionRepository,
-								   val queueRepository: QueueRepository,
-								   val clientRepository: ClientRepository,
-								   val mainService: MainService) : StateProvider {
+class EnqueueByNumberStateProvider(val mainService: MainService) : StateProvider {
 
 	override fun findOrNull(sender: ChatSender, stateName: String): ChatState? {
 		if(!stateName.startsWith("enqueue-by-number-queue:")) return null
 
 		val queueId = stateName.substring("enqueue-by-number-queue:".length).toLong()
-		return EnqueueByNumberState(positionRepository, queueRepository, clientRepository, mainService, queueId, "main-menu")
+		return EnqueueByNumberState(mainService, queueId, "main-menu")
 	}
 }
