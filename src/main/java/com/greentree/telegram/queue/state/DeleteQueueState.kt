@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender
 class DeleteQueueState(val repository: QueueRepository, val mainService: MainService, val nextState: String) : ChatState {
 
 	override fun init(sender: ChatSender): String? {
-		createInlineKeyboard("Выберете очередь", mainService.findAllQueueNames(), sender)
+		createInlineKeyboard("Выберите очередь", mainService.findAllQueueNames(), sender)
 		return null
 	}
 

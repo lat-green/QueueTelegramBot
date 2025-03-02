@@ -17,6 +17,6 @@ class MainMenuStateProvider (val mainService: MainService) : StateProvider {
 			buttons.put("Создание очереди", "create-queue")
 			buttons.put("Удаление очереди", "delete-queue")
 		}
-		return ChooseState("Меню", buttons)
+		return ChooseState("Главное меню", buttons)
 	}
 }

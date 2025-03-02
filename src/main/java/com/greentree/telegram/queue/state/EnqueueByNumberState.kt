@@ -19,7 +19,7 @@ class EnqueueByNumberState(
 			return "main-menu"
 		}
 
-		sender.send("Введите желаемый номер позиции")
+		sender.send("Введите желаемый номер")
 		return null
 	}
 

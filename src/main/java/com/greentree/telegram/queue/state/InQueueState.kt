@@ -19,13 +19,14 @@ class InQueueState(
 	enum class Actions(val text: String) {
 		ENQUEUEFIRSTFREE("Занять"),
 		ENQUEUEBYNUMBER("Занять по месту"),
-		DEQUEUE("Освободить")
+		DEQUEUE("Освободить"),
+		TOMAINMENU("В главное меню")
 	}
 
 	override fun init(sender: ChatSender): String? {
 		sender.send(mainService.getQueuePeople(queueId))
 		createInlineKeyboard(
-			"Выберете действие",
+			"Выберите действие",
 			Actions.entries.map { it.text },
 			sender
 		)
@@ -40,6 +41,8 @@ class InQueueState(
 			Actions.ENQUEUEFIRSTFREE -> return "enqueue-first-free-queue:$queueId"
 
 			Actions.ENQUEUEBYNUMBER -> return "enqueue-by-number-queue:$queueId"
+
+			Actions.TOMAINMENU -> return "main-menu"
 		}
 		return nextState
 	}

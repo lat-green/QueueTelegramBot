@@ -22,6 +22,7 @@ data class ChoosingQueueStateProvider(
 			sender.send("Очередей нет")
 			return redirect("main-menu")
 		}
-		return SortedChooseState("Выберете очередь", queues)
+
+		return SortedChooseState("Выберите очередь", queues)
 	}
 }
