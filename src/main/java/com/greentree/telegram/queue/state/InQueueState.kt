@@ -54,7 +54,6 @@ class InQueueState(
 	override fun onCallback(sender: AbsSender, query: CallbackQuery): String {
 		val text = query.data
 		val client = clientRepository.findByChatId(query.message.chatId).orElseThrow()
-		sender.send(query.message.chatId, client.toString())
 		when(Actions.entries.first { it.text == text }) {
 			Actions.DEQUEUE -> {
 				if(isClientInQueue(positions, client)) {
@@ -66,12 +65,7 @@ class InQueueState(
 
 			Actions.ENQUEUEFIRSTFREE -> {
 				if(!isClientInQueue(positions, client)) {
-					val freeNumber = findFirstFreeNumber(positions)
-					val position = Position()
-					position.client = client
-					position.queue = queue
-					position.number = freeNumber
-					positionRepository.save(position)
+					mainService.enqueue(client.id!!, queueId)
 				} else {
 					sender.send(query.message.chatId, "Вы уже в очереди")
 				}
@@ -87,15 +81,5 @@ class InQueueState(
 			if(position.client == client)
 				return true
 		return false
-	}
-
-	private fun findFirstFreeNumber(positions: List<Position>): Int {
-		var i = 0
-		while(i < positions.size) {
-			if(positions[i].number > i)
-				return i
-			i++
-		}
-		return positions.size
 	}
 }
