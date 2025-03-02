@@ -1,11 +1,9 @@
 package com.greentree.telegram.queue.state
 
-import com.greentree.telegram.queue.model.Position
 import com.greentree.telegram.queue.repository.ClientRepository
 import com.greentree.telegram.queue.repository.PositionRepository
 import com.greentree.telegram.queue.repository.QueueRepository
 import com.greentree.telegram.queue.service.MainService
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 
@@ -18,18 +16,19 @@ class EnqueueByNumberState(
 	val nextState: String
 ) : ChatState {
 
-	override fun init(sender: ChatSender) {
-		if (mainService.isClientInQueue(sender.chatId, queueId)){
+	override fun init(sender: ChatSender): String? {
+		if(mainService.isClientInQueue(sender.chatId, queueId)) {
 			sender.send("Вы уже в очереди")
 		}
-			sender.send("Введите желаемый номер позиции")
+		sender.send("Введите желаемый номер позиции")
+		return null
 	}
 
-	override fun onMessage(sender: AbsSender, message: Message): String? {
+	override fun onMessage(sender: AbsSender, message: Message): String {
 		val text = message.text
 		val number = text.toInt() - 1
 		val output = mainService.enqueueByNumber(message.chatId, queueId, number)
-		if (!output.left)
+		if(!output.left)
 			sender.send(message.chatId, output.right)
 		return nextState
 	}

@@ -28,8 +28,7 @@ public class MainService {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
-
-        if(isClientInQueue(positions, client)){
+        if (isClientInQueue(positions, client)) {
             positionRepository.deleteByClientAndQueue(client, queue);
             return true;
         }
@@ -47,8 +46,7 @@ public class MainService {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
-
-        if (!isClientInQueue(positions, client)){
+        if (!isClientInQueue(positions, client)) {
             int number = findFirstFreeNumber(positions);
             Position position = new Position();
             position.setClient(client);
@@ -58,6 +56,16 @@ public class MainService {
             return true;
         }
         return false;
+    }
+
+    private int findFirstFreeNumber(List<Position> positions) {
+        int i = 0;
+        while (i < positions.size()) {
+            if (positions.get(i).getNumber() > i)
+                return i;
+            i++;
+        }
+        return positions.size();
     }
 
     public Pair<Boolean, String> enqueueByNumber(long chatId, long queueId, int number) {
@@ -81,6 +89,13 @@ public class MainService {
             errorDescription = "Вы уже в очереди";
         }
         return Pair.of(isDone, errorDescription);
+    }
+
+    private boolean isNumberFree(List<Position> positions, int number) {
+        for (var position : positions)
+            if (position.getNumber() == number)
+                return false;
+        return true;
     }
 
     public boolean createQueue(String text, Long chatId) {
@@ -111,45 +126,27 @@ public class MainService {
         return queueRepository.findAll();
     }
 
-    public void addClient(Long chatId) {
+    public void addClient(Long chatId, String defaultName) {
         if (clientRepository.findByChatId(chatId).isEmpty()) {
             Client client = new Client();
             client.setChatId(chatId);
-            client.setName("Anonimus");
+            client.setName(defaultName);
             client.setAdmin(false);
             clientRepository.save(client);
         }
     }
 
-    private int findFirstFreeNumber(List<Position> positions) {
-        int i = 0;
-        while(i < positions.size()) {
-            if(positions.get(i).getNumber() > i)
-                return i;
-            i++;
-        }
-        return positions.size();
-    }
-
-    public boolean isClientInQueue(long chatId ,long queueId){
+    public boolean isClientInQueue(long chatId, long queueId) {
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         Queue queue = queueRepository.getReferenceById(queueId);
         List<Position> positions = positionRepository.findAllByQueue(queue);
-
         for (var position : positions)
             if (position.getClient() == client)
                 return true;
         return false;
     }
 
-    private boolean isNumberFree(List<Position> positions, int number) {
-        for(var position : positions)
-            if(position.getNumber() == number)
-                return false;
-        return true;
-    }
-
-    public String getQueuePeople(long queueId){
+    public String getQueuePeople(long queueId) {
         Queue queue = queueRepository.getReferenceById(queueId);
         List<Position> positions = positionRepository.findAllByQueue(queue);
         if (positions.isEmpty())
@@ -170,4 +167,5 @@ public class MainService {
     public Client findClientByChatId(long chatId) {
         return clientRepository.findByChatId(chatId).orElseThrow();
     }
+
 }

@@ -1,8 +1,6 @@
 package com.greentree.telegram.queue.state
 
 import com.greentree.telegram.queue.createInlineKeyboard
-import com.greentree.telegram.queue.model.Client
-import com.greentree.telegram.queue.model.Position
 import com.greentree.telegram.queue.repository.ClientRepository
 import com.greentree.telegram.queue.repository.PositionRepository
 import com.greentree.telegram.queue.repository.QueueRepository
@@ -27,13 +25,14 @@ class InQueueState(
 		DEQUEUE("Освободить")
 	}
 
-	override fun init(sender: ChatSender) {
+	override fun init(sender: ChatSender): String? {
 		sender.send(mainService.getQueuePeople(queueId))
 		createInlineKeyboard(
 			"Выберете действие",
 			Actions.entries.map { it.text },
 			sender
 		)
+		return null
 	}
 
 	override fun onCallback(sender: AbsSender, query: CallbackQuery): String {
@@ -43,6 +42,7 @@ class InQueueState(
 				if(!mainService.dequeue(query.message.chatId, queueId))
 					sender.send(query.message.chatId, "Вы не находитесь в очереди")
 			}
+
 			Actions.ENQUEUEFIRSTFREE -> {
 				if(!mainService.enqueue(query.message.chatId, queueId))
 					sender.send(query.message.chatId, "Вы уже в очереди")
