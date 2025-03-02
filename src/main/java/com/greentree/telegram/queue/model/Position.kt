@@ -6,10 +6,14 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import java.io.Serializable
 
-@Entity(name = "Queue")
-data class Queue @JvmOverloads constructor(
+@Entity(name = "Position")
+data class Position @JvmOverloads constructor(
 	@Column
-	var name: String = "",
+	var queue: Queue? = null,
+	@Column
+	var client: Client? = null,
+	@Column
+	var number: Int = 0,
 	@Id
 	@GeneratedValue
 	var id: Long? = null,

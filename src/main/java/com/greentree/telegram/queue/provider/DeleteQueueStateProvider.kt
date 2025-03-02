@@ -1,18 +1,16 @@
 package com.greentree.telegram.queue.provider
 
+import com.greentree.telegram.queue.model.Queue
+import com.greentree.telegram.queue.repository.ClientRepository
 import com.greentree.telegram.queue.repository.QueueRepository
 import com.greentree.telegram.queue.state.*
 import org.springframework.stereotype.Component
-import org.telegram.telegrambots.meta.api.objects.Chat
-import org.telegram.telegrambots.meta.bots.AbsSender
 
 @Component
-data class ChoosingQueueStateProvider(
-	val repository: QueueRepository,
-) : StateProvider {
+class DeleteQueueStateProvider (val repository: QueueRepository): StateProvider {
 
 	override fun findOrNull(sender: ChatSender, stateName: String): StateProvider.Response? {
-		if(stateName != "choosing-queue") return null
+		if(stateName != "delete-queue") return null
 
 		val queues = mutableMapOf<String, String?>()
 		for(queue in repository.findAll())
@@ -22,6 +20,6 @@ data class ChoosingQueueStateProvider(
 			sender.send("Очередей нет")
 			return redirect("main-menu")
 		}
-		return ChooseState("Выберете предмет", queues)
+		return DeleteQueueState(repository, "main-menu")
 	}
 }
