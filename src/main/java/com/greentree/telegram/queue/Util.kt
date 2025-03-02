@@ -7,12 +7,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 fun createInlineKeyboard(text: String, buttons: Iterable<String>, sender: ChatSender) {
 	val keyboard = InlineKeyboardMarkup()
-	keyboard.keyboard = listOf(buttons.map { text ->
+	keyboard.keyboard = buttons.map { text ->
 		val button = InlineKeyboardButton()
 		button.text = text
 		button.callbackData = text
-		button
-	})
+		listOf(button)
+	}
 	val send = SendMessage(sender.chatId.toString(), text)
 	send.replyMarkup = keyboard
 	sender.sender.execute(send)
