@@ -17,13 +17,6 @@ class InQueueState(val repository: PositionRepository, val nextState: String) : 
 
     override fun onCallback(sender: AbsSender, query: CallbackQuery): String? {
         val text = query.data
-        val positions =
-        if (text == "В конец очереди"){
-
-        }
-        if (text == "По номеру места"){
-
-        }
         return super.onCallback(sender, query)
     }
 }
