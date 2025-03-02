@@ -55,7 +55,7 @@ data class StateMachine(
 			val nextStateInfo = find(nextStateName)
 			states[chatId] = nextStateInfo
 			val a = nextStateInfo.init(methodCaller, sender.withChatId(chatId))
-			resolveNextState(sender, , chatId, a)
+			resolveNextState(sender, chatId, a)
 		}
 	}
 

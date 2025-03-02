@@ -6,6 +6,7 @@ import com.greentree.telegram.queue.repository.PositionRepository
 import com.greentree.telegram.queue.repository.QueueRepository
 import com.greentree.telegram.queue.service.MainService
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
+import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 
 class EnqueueByNumberState(
@@ -17,18 +18,19 @@ class EnqueueByNumberState(
 	val nextState: String
 ) : ChatState {
 
-	override fun onCallback(sender: AbsSender, query: CallbackQuery): String {
-		val text = query.data
-		val client = clientRepository.findByChatId(query.message.chatId).orElseThrow()
-		val number = text.toInt()
-		val output = mainService.enqueueByNumber(query.message.chatId, queueId, number)
+	override fun init(sender: ChatSender) {
+		if (mainService.isClientInQueue(sender.chatId, queueId)){
+			sender.send("Вы уже в очереди")
+		}
+			sender.send("Введите желаемый номер позиции")
+	}
+
+	override fun onMessage(sender: AbsSender, message: Message): String? {
+		val text = message.text
+		val number = text.toInt() - 1
+		val output = mainService.enqueueByNumber(message.chatId, queueId, number)
 		if (!output.left)
-			sender.send(query.message.chatId, output.right)
+			sender.send(message.chatId, output.right)
 		return nextState
 	}
-
-	override fun init(sender: ChatSender) {
-		sender.send("Введите желаемый номер позиции")
-	}
-
 }

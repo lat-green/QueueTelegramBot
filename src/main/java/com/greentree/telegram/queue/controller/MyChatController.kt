@@ -1,12 +1,16 @@
 package com.greentree.telegram.queue.controller
 
 import com.greentree.commons.util.react.useRef
+import com.greentree.telegram.queue.createInlineKeyboard
 import com.greentree.telegram.queue.lib.StateContext
 import com.greentree.telegram.queue.lib.StateController
 import com.greentree.telegram.queue.service.MainService
+import com.greentree.telegram.queue.state.ChatSender
 import com.greentree.telegram.queue.state.redirect
+import com.greentree.telegram.queue.state.send
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
 
 @Component
@@ -15,7 +19,7 @@ class MyChatController(
 ) {
 
 	@StateController
-	fun StateContext.begin(message: Message?): String {
+	fun begin(message: Message?): String {
 		message?.on {
 			if(text == "/start")
 				redirect("counter?id=15")
@@ -24,15 +28,39 @@ class MyChatController(
 	}
 
 	@StateController
-	fun StateContext.counter(message: Message?, @Qualifier("type") type: String, @Qualifier("id") start: Int): Any {
-		var ref by useRef(start)
+	fun counter(message: Message?, query: CallbackQuery?, @Qualifier("type") type: String, @Qualifier("id") start: Int): Any {
 		message?.on {
 			if(text == "/inc") {
-				ref++
-				return "[$type] ($ref) ++"
+				return "[$type] ++"
 			}
 		}
-		return "[$type] ($ref) Ведите /inc"
+		query?.on {
+
+		}
+		return "[$type] Ведите /inc"
+	}
+
+	@StateController
+	fun choose(query: CallbackQuery?, sender: ChatSender){
+		query?.on {
+			val text = query.data
+			if(queues.containsKey(text))
+				return nextStates[text]
+			sender.send(query.message.chatId, "Выберите одно из представленных действий")
+			return null
+
+		}
+
+		val queues = mutableMapOf<String, String?>()
+		for(queue in service.findAllQueue())
+			queues[queue.name] = "queue?id=" + queue.id
+
+		if (queues.isEmpty()){
+			sender.send("Очередей нет")
+			redirect("main-menu")
+		}
+
+		createInlineKeyboard("Выберите предмет", queues.keys, sender)
 	}
 }
 

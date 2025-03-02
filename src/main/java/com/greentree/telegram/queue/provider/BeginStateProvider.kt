@@ -9,11 +9,11 @@ import com.greentree.telegram.queue.state.StateProvider
 import org.springframework.stereotype.Component
 
 @Component
-class BeginStateProvider (val repository: ClientRepository, val mainService: MainService): StateProvider {
+class BeginStateProvider (val mainService: MainService): StateProvider {
 
 	override fun findOrNull(sender: ChatSender, stateName: String): ChatState? {
 		if(stateName != "begin") return null
 
-		return StartRequestState(repository, mainService, "main-menu")
+		return StartRequestState(mainService, "main-menu")
 	}
 }

@@ -8,8 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 
 @Slf4j
-data class StartRequestState(val repository: ClientRepository,
-							 val mainService: MainService,
+data class StartRequestState(val mainService: MainService,
 							 val nextState: String) : ChatState {
 
 	override fun onMessage(sender: AbsSender, message: Message): String? {

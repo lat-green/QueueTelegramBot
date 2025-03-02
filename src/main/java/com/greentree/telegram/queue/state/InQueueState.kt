@@ -48,7 +48,7 @@ class InQueueState(
 					sender.send(query.message.chatId, "Вы уже в очереди")
 			}
 
-			Actions.ENQUEUEBYNUMBER -> return "enqueue-by-number"
+			Actions.ENQUEUEBYNUMBER -> return "enqueue-by-number-queue:$queueId"
 		}
 		return nextState
 	}
