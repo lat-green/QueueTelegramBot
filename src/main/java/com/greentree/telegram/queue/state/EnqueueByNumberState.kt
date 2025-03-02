@@ -15,6 +15,7 @@ class EnqueueByNumberState(
 	val clientRepository: ClientRepository,
 	val mainService: MainService,
 	val queueId: Long,
+	val clientId: Long,
 	val nextState: String
 ) : ChatState {
 
