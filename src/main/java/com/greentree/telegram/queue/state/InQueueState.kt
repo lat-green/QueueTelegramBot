@@ -19,6 +19,7 @@ class InQueueState(
 	enum class Actions(val text: String) {
 		ENQUEUEFIRSTFREE("Занять"),
 		ENQUEUEBYNUMBER("Занять по месту"),
+		ENQUEUEDEADLIE("Занять дедлайн"),
 		DEQUEUE("Освободить"),
 		TOMAINMENU("В главное меню")
 	}
@@ -41,6 +42,8 @@ class InQueueState(
 			Actions.ENQUEUEFIRSTFREE -> return "enqueue-first-free-queue:$queueId"
 
 			Actions.ENQUEUEBYNUMBER -> return "enqueue-by-number-queue:$queueId"
+
+			Actions.ENQUEUEDEADLIE -> return "enqueue-deadline:$queueId"
 
 			Actions.TOMAINMENU -> return "main-menu"
 		}

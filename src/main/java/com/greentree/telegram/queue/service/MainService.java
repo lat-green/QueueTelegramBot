@@ -46,6 +46,7 @@ public class MainService {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
+
         if (!isClientInQueue(positions, client)) {
             int number = findFirstFreeNumber(positions);
             Position position = new Position();
@@ -56,8 +57,23 @@ public class MainService {
         }
     }
 
+    public void enqueueDeadline(long chatId, long queueId){
+        Queue queue = queueRepository.getReferenceById(queueId);
+        Client client = clientRepository.findByChatId(chatId).orElseThrow();
+        List<Position> positions = positionRepository.findAllByQueue(queue);
+
+        if (!isClientInQueue(positions, client)) {
+            int number = 0;
+            Position position = new Position();
+            position.setClient(client);
+            position.setQueue(queue);
+            position.setNumber(number);
+            positionRepository.save(position);
+        }
+    }
+
     private int findFirstFreeNumber(List<Position> positions) {
-        int i = 0;
+        int i = 1;
         while (i < positions.size()) {
             if (positions.get(i).getNumber() > i)
                 return i;

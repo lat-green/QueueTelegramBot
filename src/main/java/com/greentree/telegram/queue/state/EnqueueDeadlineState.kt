@@ -7,7 +7,7 @@ import com.greentree.telegram.queue.service.MainService
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 
-class EnqueueByNumberState(
+class EnqueueDeadlineState(
 	val mainService: MainService,
 	val queueId: Long,
 	val nextState: String
@@ -19,19 +19,7 @@ class EnqueueByNumberState(
 			return "main-menu"
 		}
 
-		sender.send("Введите желаемый номер")
-		return null
-	}
-
-	override fun onMessage(sender: AbsSender, message: Message): String {
-		val text = message.text
-		val number = text.toInt()
-		if (number <= 0){
-			sender.send(message.chatId, "Ты дурочок или что?")
-			return "main-menu"
-		}
-		if (!mainService.enqueueByNumber(message.chatId, queueId, number))
-			sender.send(message.chatId, "Место занято")
+		mainService.enqueueDeadline(sender.chatId, queueId)
 		return nextState
 	}
 }

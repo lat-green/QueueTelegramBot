@@ -20,6 +20,6 @@ class EnqueueFirstFreeState(
 		}
 
 		mainService.enqueue(sender.chatId, queueId)
-		return null
+		return nextState
 	}
 }
