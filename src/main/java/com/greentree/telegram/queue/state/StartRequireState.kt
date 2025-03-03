@@ -1,5 +1,6 @@
 package com.greentree.telegram.queue.state
 
+import com.greentree.telegram.queue.lib.redirect
 import com.greentree.telegram.queue.service.MainService
 import lombok.extern.slf4j.Slf4j
 import org.telegram.telegrambots.meta.api.objects.Message
@@ -11,19 +12,17 @@ data class StartRequireState(
 	val nextState: String
 ) : ChatState {
 
-	override fun onMessage(sender: AbsSender, message: Message): String? {
+	override fun onMessage(sender: AbsSender, message: Message) {
 		val text = message.text
 		if("/start" == text) {
 			val user = message.from
 			val name = "${user.firstName} ${user.lastName}"
 			mainService.addClient(message.chatId, name)
-			return nextState
+			redirect(nextState)
 		}
-		return null
 	}
 
-	override fun init(sender: ChatSender): String? {
+	override fun init(sender: ChatSender) {
 		sender.send("Введите /start")
-		return null
 	}
 }

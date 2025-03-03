@@ -1,11 +1,7 @@
 package com.greentree.telegram.queue.state
 
-import com.greentree.telegram.queue.repository.ClientRepository
-import com.greentree.telegram.queue.repository.PositionRepository
-import com.greentree.telegram.queue.repository.QueueRepository
+import com.greentree.telegram.queue.lib.redirect
 import com.greentree.telegram.queue.service.MainService
-import org.telegram.telegrambots.meta.api.objects.Message
-import org.telegram.telegrambots.meta.bots.AbsSender
 
 class EnqueueFirstFreeState(
 	val mainService: MainService,
@@ -13,13 +9,13 @@ class EnqueueFirstFreeState(
 	val nextState: String
 ) : ChatState {
 
-	override fun init(sender: ChatSender): String? {
+	override fun init(sender: ChatSender) {
 		if(mainService.isClientInQueue(sender.chatId, queueId)) {
 			sender.send("Вы уже в очереди")
-			return "main-menu"
+			redirect("main-menu")
 		}
 
 		mainService.enqueue(sender.chatId, queueId)
-		return null
+		// TODO это не ошибка? Может быть redirect(nextState)
 	}
 }
