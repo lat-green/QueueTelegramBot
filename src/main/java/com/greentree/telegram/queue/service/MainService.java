@@ -166,6 +166,8 @@ public class MainService {
             builder.append(position.getNumber());
             builder.append(")");
             builder.append(position.getClient().getName());
+            if (position.getNumber() == 0)
+                builder.append("\t//Дедлайн");
             builder.append('\n');
         }
         return builder.toString();

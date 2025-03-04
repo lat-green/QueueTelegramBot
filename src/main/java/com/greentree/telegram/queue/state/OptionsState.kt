@@ -11,6 +11,7 @@ data class OptionsState(val mainService: MainService, val nextState: String) : C
 
 	enum class Options(val text: String){
 		RENAME("Изменить имя"),
+		TOMAINMENU("В главное меню"),
 	}
 
 	override fun onCallback(sender: AbsSender, query: CallbackQuery): String? {
@@ -19,6 +20,8 @@ data class OptionsState(val mainService: MainService, val nextState: String) : C
 
 		when(Options.entries.first { it.text == text }) {
 			Options.RENAME -> return "rename"
+
+			Options.TOMAINMENU -> return "main-menu"
 		}
 		return null
 	}
