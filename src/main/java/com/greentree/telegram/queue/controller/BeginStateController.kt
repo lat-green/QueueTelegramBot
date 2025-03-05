@@ -7,6 +7,7 @@ import com.greentree.telegram.queue.lib.text
 import com.greentree.telegram.queue.service.MainService
 
 class BeginStateController(
+	val mainService: MainService,
 	val next: String,
 	val service: MainService
 ) : StateController {
