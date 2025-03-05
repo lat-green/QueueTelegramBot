@@ -25,6 +25,8 @@ class StateMachineImpl(
 			return find(chatId, e.nextStateName)
 		} catch(_: NothingException) {
 			return null
+		} catch (e: Throwable) {
+			throw RuntimeException("$currentState", e)
 		}
 		return null
 	}
@@ -39,6 +41,8 @@ class StateMachineImpl(
 			return find(chatId, e.nextStateName)
 		} catch(_: NothingException) {
 			return null
+		} catch (e: Throwable) {
+			throw RuntimeException("$currentState", e)
 		}
 		return null
 	}

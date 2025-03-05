@@ -5,8 +5,8 @@ data class ArgsResolveProvider(
 ) : StateController.Provider {
 
 	override fun provide(name: String): StateController? {
-		val origin = origin.provide(name) ?: return null
 		val list = name.split("?")
+		val origin = origin.provide(list[0]) ?: return null
 		if(list.size != 2)
 			return origin
 		val params = mutableMapOf<String, String>()

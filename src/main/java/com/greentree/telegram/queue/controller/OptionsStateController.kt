@@ -9,16 +9,9 @@ import com.greentree.telegram.queue.service.MainService
 
 class OptionsStateController() : StateController {
 
-	enum class Options(val text: String, val nextState: String) {
-		RENAME("Изменить имя", "rename"),
-		TOMAINMENU("В главное меню", "main-menu"),
-	}
-
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
-		executeInlineKeyboard("Выберите опцию", Options.entries.map { it.text })
+		val buttons = mapOf("Изменить имя" to "rename", "В главное меню" to "main-menu")
 
-		onCallback {
-			redirect(it)
-		}
+		choose("Опции", buttons)
 	}
 }

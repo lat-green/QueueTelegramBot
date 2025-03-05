@@ -47,7 +47,7 @@ data class StateTelegramBot<S : Any>(
 	@Throws(TelegramApiException::class)
 	private fun onMessage(message: Message) {
 		val chatId = message.chatId
-		val currentState = states.remove(chatId) ?: stateMachine.begin(chatId)
+		val currentState = states.remove(chatId) ?: stateMachine.begin(chatId).also { stateMachine.init(this, it, chatId) }
 		val nextStateName = stateMachine.onMessage(this, currentState, message)
 		resolveNextState(chatId, nextStateName)
 	}
@@ -55,7 +55,7 @@ data class StateTelegramBot<S : Any>(
 	@Throws(TelegramApiException::class)
 	private fun onCallback(query: CallbackQuery) {
 		val chatId = query.message.chatId
-		val currentState = states.remove(chatId) ?: stateMachine.begin(chatId)
+		val currentState = states.remove(chatId) ?: stateMachine.begin(chatId).also { stateMachine.init(this, it, chatId) }
 		val nextStateName = stateMachine.onCallback(this, currentState, query)
 		resolveNextState(chatId, nextStateName)
 	}

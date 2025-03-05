@@ -20,6 +20,8 @@ class StateControllerProvider(
 			"main-menu" to MainMenuStateController(service),
 			"choose-queue" to ChooseQueueStateController(service),
 			"queue" to QueueStateController(service),
+			"create-queue" to CreateQueueStateController("main-menu", service),
+			"delete-queue" to DeleteQueueStateController("main-menu", service),
 			"enqueue-first-free" to EnqueueFirstFreeStateController("main-menu", service),
 			"enqueue-by-number" to EnqueueByNumberStateController("main-menu", service),
 			"enqueue-deadline" to EnqueueDeadlineStateController("main-menu", service),

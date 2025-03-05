@@ -74,13 +74,22 @@ public class MainService {
     }
 
     private int findFirstFreeNumber(List<Position> positions) {
-        int i = 1;
-        while (i < positions.size()) {
-            if (positions.get(i).getNumber() > i)
-                return i;
+        if (positions.isEmpty() || positions.getLast().getNumber() == 0)
+            return 0;
+
+        int i = 0, number = 1;
+
+        while (positions.get(i).getNumber() == 0)
             i++;
+
+        while (i < positions.size()){
+            if (positions.get(i).getNumber() != number)
+                return number;
+            i++;
+            number++;
         }
-        return positions.size();
+
+        return number + 1;
     }
 
     public boolean enqueueByNumber(long chatId, long queueId, int number) {

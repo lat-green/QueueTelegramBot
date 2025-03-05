@@ -12,7 +12,6 @@ class EnqueueByNumberStateController(
 
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
 		val queueId = params.get("queueId")?.toLong()?: TODO()
-		val chatId = params.get("chatId")?.toLong()?: TODO()
 
 		if (service.isClientInQueue(chatId, queueId)){
 			text("Вы уже в очереди")

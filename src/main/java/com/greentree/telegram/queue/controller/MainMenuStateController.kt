@@ -13,7 +13,7 @@ class MainMenuStateController(
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
 		val client = service.findClientByChatId(chatId)
 		val buttons = mutableMapOf(
-			"Очереди" to "choosing-queue",
+			"Очереди" to "choose-queue",
 			"Опции" to "options")
 
 		if(client.isAdmin) {
