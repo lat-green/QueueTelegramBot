@@ -73,9 +73,9 @@ public class MainService {
         }
     }
 
-    private int findFirstFreeNumber(List<Position> positions) {
-        if (positions.isEmpty() || positions.getLast().getNumber() == 0)
-            return 0;
+    public static int findFirstFreeNumber(List<Position> positions) {
+        if (positions.isEmpty() || positions.get(positions.size() - 1).getNumber() == 0)
+            return 1;
 
         int i = 0, number = 1;
 
@@ -89,7 +89,7 @@ public class MainService {
             number++;
         }
 
-        return number + 1;
+        return number;
     }
 
     public boolean enqueueByNumber(long chatId, long queueId, int number) {

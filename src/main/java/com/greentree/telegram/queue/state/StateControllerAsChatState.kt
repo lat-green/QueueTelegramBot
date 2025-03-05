@@ -3,6 +3,7 @@ package com.greentree.telegram.queue.state
 import com.greentree.telegram.queue.lib.StateController
 import com.greentree.telegram.queue.lib.initialize
 import com.greentree.telegram.queue.lib.nothing
+import com.greentree.telegram.queue.lib.redirect
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
@@ -12,8 +13,8 @@ data class StateControllerAsChatState(
 	val origin: StateController,
 ) : ChatState {
 
-	private lateinit var onCallback: (String) -> Unit
-	private lateinit var onMessage: (Message) -> Unit
+	private lateinit var onCallbackFun: (String) -> Unit
+	private lateinit var onMessageFun: (Message) -> Unit
 
 	override fun init(sender: ChatSender): Nothing {
 		val (sender, chatId) = sender
@@ -24,12 +25,12 @@ data class StateControllerAsChatState(
 			override fun execute(sendMessage: SendMessage): Message = sender.execute(sendMessage)
 
 			override fun onCallback(onCallback: (String) -> Nothing): Nothing {
-				this@StateControllerAsChatState.onCallback = onCallback
+				this@StateControllerAsChatState.onCallbackFun = onCallback
 				nothing()
 			}
 
 			override fun onMessage(onMessage: (Message) -> Nothing): Nothing {
-				this@StateControllerAsChatState.onMessage = onMessage
+				this@StateControllerAsChatState.onMessageFun = onMessage
 				nothing()
 			}
 		}
@@ -37,11 +38,21 @@ data class StateControllerAsChatState(
 	}
 
 	override fun onMessage(sender: AbsSender, message: Message) {
-		onMessage(message)
+		if (!::onMessageFun.isInitialized){
+			sender.send(message.chatId, "Невозможное действие")
+			redirect("begin")
+		}
+
+		onMessageFun(message)
 	}
 
 	override fun onCallback(sender: AbsSender, query: CallbackQuery) {
-		onCallback(query.data)
+		if (!::onCallbackFun.isInitialized){
+			sender.send(query.message.chatId, "Невозможное действие")
+			redirect("begin")
+		}
+
+		onCallbackFun(query.data)
 	}
 }
 
