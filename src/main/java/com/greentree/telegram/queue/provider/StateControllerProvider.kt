@@ -1,7 +1,6 @@
 package com.greentree.telegram.queue.provider
 
-import com.greentree.telegram.queue.controller.BeginStateController
-import com.greentree.telegram.queue.controller.QueueStateController
+import com.greentree.telegram.queue.controller.*
 import com.greentree.telegram.queue.lib.ArgsResolveProvider
 import com.greentree.telegram.queue.lib.MapProvider
 import com.greentree.telegram.queue.service.MainService
@@ -17,8 +16,16 @@ class StateControllerProvider(
 
 	private val provider = ArgsResolveProvider(
 		MapProvider(
-			"begin" to BeginStateController("queue"),
-			"queue" to QueueStateController(service)
+			"begin" to BeginStateController("main-menu", service),
+			"main-menu" to MainMenuStateController(service),
+			"choose-queue" to ChooseQueueStateController(service),
+			"queue" to QueueStateController(service),
+			"enqueue-first-free" to EnqueueFirstFreeStateController("main-menu", service),
+			"enqueue-by-number" to EnqueueByNumberStateController("main-menu", service),
+			"enqueue-deadline" to EnqueueDeadlineStateController("main-menu", service),
+			"dequeue" to DequeueStateController("main-menu", service),
+			"options" to OptionsStateController(),
+			"rename" to RenameStateController("main-menu", service),
 		)
 	)
 

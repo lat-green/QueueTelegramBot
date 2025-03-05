@@ -6,25 +6,21 @@ import com.greentree.telegram.queue.lib.redirect
 import com.greentree.telegram.queue.lib.text
 import com.greentree.telegram.queue.service.MainService
 
-class BeginStateController(
-	val next: String,
+class MainMenuStateController(
 	val service: MainService
 ) : StateController {
 
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
-		text("Введите /start")
+		val client = service.findClientByChatId(chatId)
+		val buttons = mutableMapOf(
+			"Очереди" to "choosing-queue",
+			"Опции" to "options")
 
-		onMessage {
-			if(it.text == "/start"){
-				val user = it.from
-				val name = "${user.firstName} ${user.lastName}"
-
-				service.addClient(it.chatId, name)
-
-				redirect(next)
-			}
-
-			reInitialize()
+		if(client.isAdmin) {
+			buttons.put("Создание очереди", "create-queue")
+			buttons.put("Удаление очереди", "delete-queue")
 		}
+
+		choose("Главное меню", buttons)
 	}
 }

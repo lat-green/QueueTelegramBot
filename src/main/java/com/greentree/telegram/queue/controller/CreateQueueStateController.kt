@@ -1,30 +1,25 @@
 package com.greentree.telegram.queue.controller
 
+import com.greentree.telegram.queue.executeInlineKeyboard
 import com.greentree.telegram.queue.lib.StateController
-import com.greentree.telegram.queue.lib.reInitialize
+import com.greentree.telegram.queue.lib.nothing
 import com.greentree.telegram.queue.lib.redirect
 import com.greentree.telegram.queue.lib.text
 import com.greentree.telegram.queue.service.MainService
 
-class BeginStateController(
+class CreateQueueStateController(
 	val next: String,
-	val service: MainService
+	val service: MainService,
 ) : StateController {
 
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
-		text("Введите /start")
+		text("Введите название новой очереди")
 
 		onMessage {
-			if(it.text == "/start"){
-				val user = it.from
-				val name = "${user.firstName} ${user.lastName}"
+			if (!service.createQueue(it.text, it.chatId))
+				text("Очередь с таким названием уже существует")
 
-				service.addClient(it.chatId, name)
-
-				redirect(next)
-			}
-
-			reInitialize()
+			redirect(next)
 		}
 	}
 }

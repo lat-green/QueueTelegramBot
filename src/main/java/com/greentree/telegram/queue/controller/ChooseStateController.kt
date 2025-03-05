@@ -22,3 +22,8 @@ fun StateController.Context.choose(
 	text: String,
 	nextStates: Map<String, String>,
 ): Nothing = inline(ChooseStateController(text, nextStates))
+
+fun StateController.Context.sortedChoose(
+	text: String,
+	nextStates: Map<String, String>,
+): Nothing = inline(ChooseStateController(text, nextStates.toSortedMap()))

@@ -28,6 +28,7 @@ public class MainService {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
+
         if (isClientInQueue(positions, client)) {
             positionRepository.deleteByClientAndQueue(client, queue);
             return true;
