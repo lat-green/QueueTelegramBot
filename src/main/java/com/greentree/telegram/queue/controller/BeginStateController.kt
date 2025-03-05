@@ -1,7 +1,7 @@
 package com.greentree.telegram.queue.controller
 
 import com.greentree.telegram.queue.lib.StateController
-import com.greentree.telegram.queue.lib.reInitialize
+import com.greentree.telegram.queue.lib.nothing
 import com.greentree.telegram.queue.lib.redirect
 import com.greentree.telegram.queue.lib.text
 import com.greentree.telegram.queue.service.MainService
@@ -12,10 +12,8 @@ class BeginStateController(
 ) : StateController {
 
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
-		text("Введите /start")
-
 		onMessage {
-			if(it.text == "/start"){
+			if(it.text == "/start") {
 				val user = it.from
 				val name = "${user.firstName} ${user.lastName}"
 
@@ -23,8 +21,8 @@ class BeginStateController(
 
 				redirect(next)
 			}
-
-			reInitialize()
+			text("Введите /start")
+			nothing()
 		}
 	}
 }
