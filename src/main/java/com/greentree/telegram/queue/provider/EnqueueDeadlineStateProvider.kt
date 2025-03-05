@@ -1,18 +1,16 @@
 package com.greentree.telegram.queue.provider
 
-import com.greentree.telegram.queue.repository.ClientRepository
-import com.greentree.telegram.queue.repository.PositionRepository
-import com.greentree.telegram.queue.repository.QueueRepository
 import com.greentree.telegram.queue.service.MainService
-import com.greentree.telegram.queue.state.*
+import com.greentree.telegram.queue.state.ChatState
+import com.greentree.telegram.queue.state.EnqueueDeadlineState
+import com.greentree.telegram.queue.state.StateProvider
 import org.springframework.stereotype.Component
 
 @Component
 class EnqueueDeadlineStateProvider(val mainService: MainService) : StateProvider {
 
-	override fun findOrNull(sender: ChatSender, stateName: String): ChatState? {
+	override fun findOrNull(chatId: Long, stateName: String): ChatState? {
 		if(!stateName.startsWith("enqueue-deadline:")) return null
-
 		val queueId = stateName.substring("enqueue-deadline:".length).toLong()
 		return EnqueueDeadlineState(mainService, queueId, "main-menu")
 	}

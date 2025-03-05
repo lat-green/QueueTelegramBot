@@ -4,8 +4,10 @@ import com.greentree.telegram.queue.lib.StateController
 import com.greentree.telegram.queue.lib.reInitialize
 import com.greentree.telegram.queue.lib.redirect
 import com.greentree.telegram.queue.lib.text
+import com.greentree.telegram.queue.service.MainService
 
 class BeginStateController(
+	val mainService: MainService,
 	val next: String,
 ) : StateController {
 
@@ -13,8 +15,12 @@ class BeginStateController(
 		text("Введите /start")
 
 		onMessage {
-			if(it.text == "/start")
+			if(it.text == "/start") {
+				val user = it.from
+				val name = "${user.firstName} ${user.lastName}"
+				mainService.addClient(it.chatId, name)
 				redirect(next)
+			}
 			reInitialize()
 		}
 	}
