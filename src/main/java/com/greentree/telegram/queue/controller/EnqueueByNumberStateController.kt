@@ -23,12 +23,17 @@ class EnqueueByNumberStateController(
 		text("Введите желаемый номер")
 
 		onMessage {
-			val number = it.text.toInt()
-
-			if(number <= 0) {
-				text("Невозможное значение")
-
+			fun invalidNumber() : Nothing {
+				text("Невозможное значение ${it.text}")
 				reInitialize()
+			}
+			val number = try {
+				  it.text.toInt()
+			} catch (e: NumberFormatException){
+				invalidNumber()
+			}
+			if (number <= 0){
+				invalidNumber()
 			}
 			service.enqueueByNumber(chatId, queueId, number)
 

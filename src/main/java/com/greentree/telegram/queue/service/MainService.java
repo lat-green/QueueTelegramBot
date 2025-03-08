@@ -84,6 +84,25 @@ public class MainService {
         }
     }
 
+    public static int findFirstFreeNumber(List<Position> positions) {
+        if (positions.isEmpty() || positions.get(positions.size() - 1).getNumber() == 0)
+            return 1;
+
+        int i = 0, number = 1;
+
+        while (positions.get(i).getNumber() == 0)
+            i++;
+
+        while (i < positions.size()){
+            if (positions.get(i).getNumber() != number)
+                return number;
+            i++;
+            number++;
+        }
+
+        return number;
+    }
+
     public boolean enqueueByNumber(long chatId, long queueId, int number) {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
@@ -174,6 +193,12 @@ public class MainService {
         return builder.toString();
     }
 
+    public List<Position> getAllPositionByQueueId(long queueId){
+        Queue queue = queueRepository.getReferenceById(queueId);
+
+        return positionRepository.findAllByQueue(queue);
+    }
+
     public Client findClientByChatId(long chatId) {
         return clientRepository.findByChatId(chatId).orElseThrow();
     }
@@ -184,4 +209,25 @@ public class MainService {
         clientRepository.save(client);
     }
 
+    public List<String> findAllNumbersAndNamesByQueueId(long queueId){
+        Queue queue = queueRepository.getReferenceById(queueId);
+        List<Position> positions = positionRepository.findAllByQueue(queue);
+        List<String> numbersAndNames = new ArrayList<>();
+
+        for (var position : positions)
+            numbersAndNames.add(position.getNumber() + ")" + position.getClient().getName());
+
+        return numbersAndNames;
+    }
+
+    public Client findClientByName(String name, long queueId){
+        Queue queue = queueRepository.getReferenceById(queueId);
+
+        for (var position : positionRepository.findAllByQueue(queue)){
+            if (position.getClient().getName().equals(name))
+                return position.getClient();
+        }
+
+        return null;
+    }
 }

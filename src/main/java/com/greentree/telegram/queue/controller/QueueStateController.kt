@@ -1,5 +1,6 @@
 package com.greentree.telegram.queue.controller
 
+import com.greentree.commons.util.react.refresh
 import com.greentree.telegram.queue.executeInlineKeyboard
 import com.greentree.telegram.queue.lib.StateController
 import com.greentree.telegram.queue.lib.redirect
@@ -10,28 +11,22 @@ class QueueStateController(
 	val service: MainService,
 ) : StateController {
 
-	enum class Actions(val text: String) {
-		ENQUEUEFIRSTFREE("Занять"),
-		ENQUEUEBYNUMBER("Занять по месту"),
-		ENQUEUEDEADLIE("Занять дедлайн"),
-		DEQUEUE("Освободить"),
-		TOMAINMENU("В главное меню")
-	}
-
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
-		val queueId = params.get("queueId")?.toLong() ?: TODO("queueId not found")
+		val queueId = params.get("queueId")?.toLong()?: TODO("queueId not found")
+		val buttons = mutableMapOf(
+			"Занять" to "enqueue-first-free?queueId=$queueId",
+			"Занять по месту" to "enqueue-by-number?queueId=$queueId",
+			"Занять дедлайн" to "enqueue-deadline?queueId=$queueId",
+			"Освободить" to "dequeue?queueId=$queueId")
+		if (service.findClientByChatId(chatId).isAdmin)
+			buttons.put("Убрать кого-либо из очереди", "dequeue-by-admin?queueId=$queueId")
+		buttons.put("В главное меню", "main-menu")
 
 		text(service.getQueuePeople(queueId))
-		executeInlineKeyboard("Выберите действие", Actions.entries.map { it.text })
+		executeInlineKeyboard("Выберите действие", buttons.keys)
 
-		onCallback { callbackData ->
-			when(Actions.entries.first { it.text == callbackData }) {
-				Actions.DEQUEUE -> redirect("dequeue?queueId=$queueId")
-				Actions.ENQUEUEFIRSTFREE -> redirect("enqueue-first-free?queueId=$queueId")
-				Actions.ENQUEUEBYNUMBER -> redirect("enqueue-by-number?queueId=$queueId")
-				Actions.ENQUEUEDEADLIE -> redirect("enqueue-deadline?queueId=$queueId")
-				Actions.TOMAINMENU -> redirect("main-menu")
-			}
+		onCallback {
+			redirect(buttons[it])
 		}
 	}
 }

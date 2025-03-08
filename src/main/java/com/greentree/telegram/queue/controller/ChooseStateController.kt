@@ -3,6 +3,9 @@ package com.greentree.telegram.queue.controller
 import com.greentree.telegram.queue.executeInlineKeyboard
 import com.greentree.telegram.queue.lib.StateController
 import com.greentree.telegram.queue.lib.redirect
+import com.greentree.telegram.queue.lib.text
+import java.lang.Thread.sleep
+import kotlin.concurrent.thread
 
 class ChooseStateController(
 	val text: String,
@@ -13,7 +16,15 @@ class ChooseStateController(
 		executeInlineKeyboard(text, nextStates.keys)
 
 		onCallback {
-			redirect(nextStates[it] ?: TODO())
+			redirect(nextStates[it] ?: run {
+				text("Была замечена подозрительная активность. Запуск самоуничтожения")
+				repeat(3){
+					text((3 - it).toString())
+					sleep(1000)
+				}
+				text("BOOM!!!")
+				redirect("main-menu")
+			})
 		}
 	}
 }
