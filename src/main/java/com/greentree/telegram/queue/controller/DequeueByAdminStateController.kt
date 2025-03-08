@@ -25,7 +25,7 @@ class DequeueByAdminStateController(
 		onCallback {
 			val index = it.indexOf(")")
 			val name = it.substring(index + 1)
-			val client = service.findClientByName(name, queueId)
+			val client = service.findClientByName(name)
 
 			client.chatId?.let { it1 -> service.dequeue(it1, queueId) }
 

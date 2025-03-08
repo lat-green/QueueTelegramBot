@@ -17,8 +17,10 @@ class QueueStateController(
 			"Занять по месту" to "enqueue-by-number?queueId=$queueId",
 			"Занять дедлайн" to "enqueue-deadline?queueId=$queueId",
 			"Освободить" to "dequeue?queueId=$queueId")
-		if (service.findClientByChatId(chatId).isAdmin)
+		if (service.findClientByChatId(chatId).isAdmin){
+			buttons.put("Добавить кого-либо в очередь", "enqueue-by-admin?queueId=$queueId")
 			buttons.put("Убрать кого-либо из очереди", "dequeue-by-admin?queueId=$queueId")
+		}
 		buttons.put("В главное меню", "main-menu")
 
 		text(service.getQueuePeople(queueId))

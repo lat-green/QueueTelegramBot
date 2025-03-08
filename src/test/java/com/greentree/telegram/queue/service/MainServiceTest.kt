@@ -13,6 +13,7 @@ class MainServiceTest {
         Assertions.assertEquals(MainService.findFirstFreeNumber(listOf(0, 0).toPositions()), 1)
         Assertions.assertEquals(MainService.findFirstFreeNumber(listOf(1, 2).toPositions()), 3)
         Assertions.assertEquals(MainService.findFirstFreeNumber(listOf(3, 4).toPositions()), 1)
+        Assertions.assertEquals(MainService.findFirstFreeNumber(listOf(1, 3).toPositions()), 2)
     }
 }
 

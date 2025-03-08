@@ -199,21 +199,15 @@ public class MainService {
         List<Position> positions = positionRepository.findAllByQueue(queue);
         List<String> numbersAndNames = new ArrayList<>();
 
+        positions.sort(Comparator.comparingInt(Position::getNumber));
         for (var position : positions)
             numbersAndNames.add(position.getNumber() + ")" + position.getClient().getName());
 
         return numbersAndNames;
     }
 
-    public Client findClientByName(String name, long queueId){
-        Queue queue = queueRepository.getReferenceById(queueId);
-
-        for (var position : positionRepository.findAllByQueue(queue)){
-            if (position.getClient().getName().equals(name))
-                return position.getClient();
-        }
-
-        return null;
+    public Client findClientByName(String name){
+        return clientRepository.findByName(name).orElseThrow();
     }
 
     public boolean isNumberTaken(int number, long queueId){
@@ -225,5 +219,14 @@ public class MainService {
         }
 
         return false;
+    }
+    
+    public List<String> findAllClientsName(){
+        List<String> names = new ArrayList<>();
+
+        for (var client : clientRepository.findAll())
+            names.add(client.getName());
+
+        return names;
     }
 }
