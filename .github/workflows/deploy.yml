@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - run: 'echo "$KEY" >> ./bunnies_backend/VideoHosting/src/main/resources/application-secret.properties'
+      - run: 'echo "$KEY" >> ./src/main/resources/application-secret.properties'
         env:
           KEY: ${{ secrets.SECRET_FILE }}
 
