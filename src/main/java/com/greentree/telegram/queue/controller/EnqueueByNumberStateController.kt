@@ -35,6 +35,10 @@ class EnqueueByNumberStateController(
 			if (number <= 0){
 				invalidNumber()
 			}
+			if (service.isNumberTaken(number, queueId)){
+				text("Это место занято")
+				reInitialize()
+			}
 			service.enqueueByNumber(chatId, queueId, number)
 
 			redirect(next)

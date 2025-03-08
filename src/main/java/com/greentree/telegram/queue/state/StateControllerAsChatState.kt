@@ -39,8 +39,7 @@ data class StateControllerAsChatState(
 
 	override fun onMessage(sender: AbsSender, message: Message) {
 		if (!::onMessageFun.isInitialized){
-			sender.send(message.chatId, "Невозможное действие")
-			redirect("begin")
+			return
 		}
 
 		onMessageFun(message)
@@ -48,8 +47,7 @@ data class StateControllerAsChatState(
 
 	override fun onCallback(sender: AbsSender, query: CallbackQuery) {
 		if (!::onCallbackFun.isInitialized){
-			sender.send(query.message.chatId, "Невозможное действие")
-			redirect("begin")
+			return
 		}
 
 		onCallbackFun(query.data)

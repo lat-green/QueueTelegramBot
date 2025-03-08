@@ -215,4 +215,15 @@ public class MainService {
 
         return null;
     }
+
+    public boolean isNumberTaken(int number, long queueId){
+        Queue queue = queueRepository.getReferenceById(queueId);
+
+        for (var position : positionRepository.findAllByQueue(queue)){
+            if (position.getNumber() == number)
+                return true;
+        }
+
+        return false;
+    }
 }
