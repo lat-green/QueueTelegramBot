@@ -1,8 +1,9 @@
 package com.greentree.telegram.queue.controller
 
-import com.greentree.commons.util.react.refresh
-import com.greentree.telegram.queue.executeInlineKeyboard
-import com.greentree.telegram.queue.lib.*
+import com.greentree.telegram.queue.lib.StateController
+import com.greentree.telegram.queue.lib.reInitialize
+import com.greentree.telegram.queue.lib.redirect
+import com.greentree.telegram.queue.lib.text
 import com.greentree.telegram.queue.service.MainService
 
 class EnqueueByNumberStateController(
@@ -11,9 +12,9 @@ class EnqueueByNumberStateController(
 ) : StateController {
 
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
-		val queueId = params.get("queueId")?.toLong()?: TODO()
+		val queueId = params.get("queueId")?.toLong() ?: TODO()
 
-		if (service.isClientInQueue(chatId, queueId)){
+		if(service.isClientInQueue(chatId, queueId)) {
 			text("Вы уже в очереди")
 
 			redirect("main-menu")
@@ -24,7 +25,7 @@ class EnqueueByNumberStateController(
 		onMessage {
 			val number = it.text.toInt()
 
-			if (number <= 0){
+			if(number <= 0) {
 				text("Невозможное значение")
 
 				reInitialize()

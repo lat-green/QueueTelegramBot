@@ -1,8 +1,6 @@
 package com.greentree.telegram.queue.controller
 
-import com.greentree.telegram.queue.executeInlineKeyboard
 import com.greentree.telegram.queue.lib.StateController
-import com.greentree.telegram.queue.lib.nothing
 import com.greentree.telegram.queue.lib.redirect
 import com.greentree.telegram.queue.lib.text
 import com.greentree.telegram.queue.service.MainService
@@ -16,7 +14,7 @@ class CreateQueueStateController(
 		text("Введите название новой очереди")
 
 		onMessage {
-			if (!service.createQueue(it.text, it.chatId))
+			if(!service.createQueue(it.text, it.chatId))
 				text("Очередь с таким названием уже существует")
 
 			redirect(next)

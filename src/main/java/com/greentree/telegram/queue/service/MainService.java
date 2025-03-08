@@ -8,7 +8,6 @@ import com.greentree.telegram.queue.repository.PositionRepository;
 import com.greentree.telegram.queue.repository.QueueRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ public class MainService {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
-
         if (isClientInQueue(positions, client)) {
             positionRepository.deleteByClientAndQueue(client, queue);
             return true;
@@ -47,7 +45,6 @@ public class MainService {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
-
         if (!isClientInQueue(positions, client)) {
             int number = findFirstFreeNumber(positions);
             Position position = new Position();
@@ -58,11 +55,25 @@ public class MainService {
         }
     }
 
-    public void enqueueDeadline(long chatId, long queueId){
+    private int findFirstFreeNumber(List<Position> positions) {
+        if (positions.isEmpty() || positions.get(positions.size() - 1).getNumber() == 0)
+            return 0;
+        int i = 0, number = 1;
+        while (positions.get(i).getNumber() == 0)
+            i++;
+        while (i < positions.size()) {
+            if (positions.get(i).getNumber() != number)
+                return number;
+            i++;
+            number++;
+        }
+        return number + 1;
+    }
+
+    public void enqueueDeadline(long chatId, long queueId) {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
-
         if (!isClientInQueue(positions, client)) {
             int number = 0;
             Position position = new Position();
@@ -73,30 +84,10 @@ public class MainService {
         }
     }
 
-    private int findFirstFreeNumber(List<Position> positions) {
-        if (positions.isEmpty() || positions.getLast().getNumber() == 0)
-            return 0;
-
-        int i = 0, number = 1;
-
-        while (positions.get(i).getNumber() == 0)
-            i++;
-
-        while (i < positions.size()){
-            if (positions.get(i).getNumber() != number)
-                return number;
-            i++;
-            number++;
-        }
-
-        return number + 1;
-    }
-
     public boolean enqueueByNumber(long chatId, long queueId, int number) {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
         List<Position> positions = positionRepository.findAllByQueue(queue);
-
         if (isNumberFree(positions, number)) {
             Position position = new Position();
             position.setClient(client);
@@ -187,10 +178,10 @@ public class MainService {
         return clientRepository.findByChatId(chatId).orElseThrow();
     }
 
-    public void rename(String newName, long chatId){
+    public void rename(String newName, long chatId) {
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
-
         client.setName(newName);
         clientRepository.save(client);
     }
+
 }

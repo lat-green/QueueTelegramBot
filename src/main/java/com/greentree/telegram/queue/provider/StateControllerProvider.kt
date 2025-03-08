@@ -1,6 +1,17 @@
 package com.greentree.telegram.queue.provider
 
-import com.greentree.telegram.queue.controller.*
+import com.greentree.telegram.queue.controller.BeginStateController
+import com.greentree.telegram.queue.controller.ChooseQueueStateController
+import com.greentree.telegram.queue.controller.CreateQueueStateController
+import com.greentree.telegram.queue.controller.DeleteQueueStateController
+import com.greentree.telegram.queue.controller.DequeueStateController
+import com.greentree.telegram.queue.controller.EnqueueByNumberStateController
+import com.greentree.telegram.queue.controller.EnqueueDeadlineStateController
+import com.greentree.telegram.queue.controller.EnqueueFirstFreeStateController
+import com.greentree.telegram.queue.controller.MainMenuStateController
+import com.greentree.telegram.queue.controller.OptionsStateController
+import com.greentree.telegram.queue.controller.QueueStateController
+import com.greentree.telegram.queue.controller.RenameStateController
 import com.greentree.telegram.queue.lib.ArgsResolveProvider
 import com.greentree.telegram.queue.lib.MapProvider
 import com.greentree.telegram.queue.service.MainService

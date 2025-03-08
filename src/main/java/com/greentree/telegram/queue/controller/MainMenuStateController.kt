@@ -1,9 +1,6 @@
 package com.greentree.telegram.queue.controller
 
 import com.greentree.telegram.queue.lib.StateController
-import com.greentree.telegram.queue.lib.reInitialize
-import com.greentree.telegram.queue.lib.redirect
-import com.greentree.telegram.queue.lib.text
 import com.greentree.telegram.queue.service.MainService
 
 class MainMenuStateController(
@@ -14,7 +11,8 @@ class MainMenuStateController(
 		val client = service.findClientByChatId(chatId)
 		val buttons = mutableMapOf(
 			"Очереди" to "choose-queue",
-			"Опции" to "options")
+			"Опции" to "options"
+		)
 
 		if(client.isAdmin) {
 			buttons.put("Создание очереди", "create-queue")
