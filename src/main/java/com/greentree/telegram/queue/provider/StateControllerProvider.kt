@@ -4,6 +4,7 @@ import com.greentree.telegram.queue.controller.BeginStateController
 import com.greentree.telegram.queue.controller.ChooseQueueStateController
 import com.greentree.telegram.queue.controller.CreateQueueStateController
 import com.greentree.telegram.queue.controller.DeleteQueueStateController
+import com.greentree.telegram.queue.controller.DequeueByAdminStateController
 import com.greentree.telegram.queue.controller.DequeueStateController
 import com.greentree.telegram.queue.controller.EnqueueByNumberStateController
 import com.greentree.telegram.queue.controller.EnqueueDeadlineStateController

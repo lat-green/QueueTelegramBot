@@ -1,6 +1,5 @@
 package com.greentree.telegram.queue.controller
 
-import com.greentree.commons.util.react.refresh
 import com.greentree.telegram.queue.executeInlineKeyboard
 import com.greentree.telegram.queue.lib.StateController
 import com.greentree.telegram.queue.lib.redirect
