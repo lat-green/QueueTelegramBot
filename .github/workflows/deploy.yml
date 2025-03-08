@@ -41,9 +41,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - run: 'echo "$KEY" >> ./src/main/resources/application-secret.properties'
-        env:
-          KEY: ${{ secrets.SECRET_FILE }}
+      #      - run: 'echo "$KEY" >> ./src/main/resources/application-secret.properties'
+      #        env:
+      #          KEY: ${{ secrets.SECRET_FILE }}
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
