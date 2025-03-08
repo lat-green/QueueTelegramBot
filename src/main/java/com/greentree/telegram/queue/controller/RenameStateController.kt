@@ -16,7 +16,14 @@ class RenameStateController(
 		text("Введите новое имя")
 
 		onMessage {
-			service.rename(it.text, it.chatId)
+			val newName = it.text
+
+			if (newName == null){
+				text("Невозможное имя")
+				redirect("main-menu")
+			}
+
+			service.rename(newName, it.chatId)
 
 			redirect(next)
 		}

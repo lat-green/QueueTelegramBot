@@ -8,7 +8,6 @@ import com.greentree.telegram.queue.repository.PositionRepository;
 import com.greentree.telegram.queue.repository.QueueRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -183,6 +182,12 @@ public class MainService {
         return builder.toString();
     }
 
+    public List<Position> getAllPositionByQueueId(long queueId){
+        Queue queue = queueRepository.getReferenceById(queueId);
+
+        return positionRepository.findAllByQueue(queue);
+    }
+
     public Client findClientByChatId(long chatId) {
         return clientRepository.findByChatId(chatId).orElseThrow();
     }
@@ -192,5 +197,27 @@ public class MainService {
 
         client.setName(newName);
         clientRepository.save(client);
+    }
+
+    public List<String> findAllNumbersAndNamesByQueueId(long queueId){
+        Queue queue = queueRepository.getReferenceById(queueId);
+        List<Position> positions = positionRepository.findAllByQueue(queue);
+        List<String> numbersAndNames = new ArrayList<>();
+
+        for (var position : positions)
+            numbersAndNames.add(position.getNumber() + ")" + position.getClient().getName());
+
+        return numbersAndNames;
+    }
+
+    public Client findClientByName(String name, long queueId){
+        Queue queue = queueRepository.getReferenceById(queueId);
+
+        for (var position : positionRepository.findAllByQueue(queue)){
+            if (position.getClient().getName().equals(name))
+                return position.getClient();
+        }
+
+        return null;
     }
 }

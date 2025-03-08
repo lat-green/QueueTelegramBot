@@ -28,6 +28,7 @@ class StateControllerProvider(
 			"dequeue" to DequeueStateController("main-menu", service),
 			"options" to OptionsStateController(),
 			"rename" to RenameStateController("main-menu", service),
+			"dequeue-by-admin" to DequeueByAdminStateController("main-menu", service),
 		)
 	)
 
