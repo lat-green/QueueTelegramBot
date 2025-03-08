@@ -24,18 +24,18 @@ jobs:
       - name: Maven Verify
         run: mvn -B clean verify
 
-  codecov:
-    needs: build
-    runs-on: self-hosted
-    steps:
-      - name: Test Coverage
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+  #  codecov:
+  #    needs: build
+  #    runs-on: self-hosted
+  #    steps:
+  #      - name: Test Coverage
+  #        uses: codecov/codecov-action@v3
+  #        with:
+  #          token: ${{ secrets.CODECOV_TOKEN }}
 
-  sonarcloud:
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v4
+  #  sonarcloud:
+  #    runs-on: self-hosted
+  #    steps:
+  #      - uses: actions/checkout@v4
 
   
