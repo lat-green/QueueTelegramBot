@@ -9,19 +9,20 @@
 name: Deploy docker image
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
-
+  push:
+    branches:
+      - '*'
+    paths:
+      - '**/src/**'
+      - '**/.github/**'
+      - '**/pom.xml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
 jobs:
-
   build_docker_image:
     runs-on: ubuntu-latest
     permissions:
