@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  api_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    pull_policy: always
+    networks:
+      - main-net
+    depends_on:
+      - mysqldb
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/queue?allowPublicKeyRetrieval=true
+  #    volumes:
+  #      - .m2:/root/.m2
+
+  mysqldb:
+    image: "mysql:9.2"
+    restart: always
+    pull_policy: always
+    ports:
+      - 3306:3306
+    networks:
+      - main-net
+    environment:
+      MYSQL_DATABASE: queue
+      MYSQL_ROOT_PASSWORD: 1234
+networks:
+  main-net:
