@@ -55,21 +55,6 @@ public class MainService {
         }
     }
 
-    private int findFirstFreeNumber(List<Position> positions) {
-        if (positions.isEmpty() || positions.get(positions.size() - 1).getNumber() == 0)
-            return 0;
-        int i = 0, number = 1;
-        while (positions.get(i).getNumber() == 0)
-            i++;
-        while (i < positions.size()) {
-            if (positions.get(i).getNumber() != number)
-                return number;
-            i++;
-            number++;
-        }
-        return number + 1;
-    }
-
     public void enqueueDeadline(long chatId, long queueId) {
         Queue queue = queueRepository.getReferenceById(queueId);
         Client client = clientRepository.findByChatId(chatId).orElseThrow();
