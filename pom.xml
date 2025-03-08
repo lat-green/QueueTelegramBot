@@ -116,13 +116,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>com.greentree.commons</groupId>
-                <artifactId>commons</artifactId>
-                <version>${commons.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
