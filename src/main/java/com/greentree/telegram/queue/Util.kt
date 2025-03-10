@@ -3,6 +3,7 @@ package com.greentree.telegram.queue
 import com.greentree.telegram.queue.lib.StateController
 import com.greentree.telegram.queue.state.ChatSender
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
@@ -19,7 +20,7 @@ fun createInlineKeyboard(text: String, buttons: Iterable<String>, sender: ChatSe
 	sender.sender.execute(send)
 }
 
-fun StateController.Context.executeInlineKeyboard(text: String, buttons: Iterable<String>) {
+fun StateController.Context.executeInlineKeyboard(text: String, buttons: Iterable<String>): Message {
 	val keyboard = InlineKeyboardMarkup()
 	keyboard.keyboard = buttons.map { text ->
 		val button = InlineKeyboardButton()
@@ -29,5 +30,5 @@ fun StateController.Context.executeInlineKeyboard(text: String, buttons: Iterabl
 	}
 	val send = SendMessage(chatId.toString(), text)
 	send.replyMarkup = keyboard
-	execute(send)
+	return execute(send)
 }
