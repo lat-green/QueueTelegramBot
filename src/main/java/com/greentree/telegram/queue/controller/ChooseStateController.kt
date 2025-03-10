@@ -6,14 +6,14 @@ import com.greentree.telegram.queue.lib.redirect
 
 class ChooseStateController(
 	val text: String,
-	val nextStates: Map<String, String>
+	val nextStates: Map<String, String>,
 ) : StateController {
 
 	override fun StateController.Context.initialize(params: Map<String, String>): Nothing {
-		executeInlineKeyboard(text, nextStates.keys)
+		executeInlineKeyboard(text, nextStates)
 
 		onCallback {
-			redirect(nextStates[it]!!)
+			redirect(it)
 		}
 	}
 }

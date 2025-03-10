@@ -32,3 +32,16 @@ fun StateController.Context.executeInlineKeyboard(text: String, buttons: Iterabl
 	send.replyMarkup = keyboard
 	return execute(send)
 }
+
+fun StateController.Context.executeInlineKeyboard(text: String, buttons: Map<String, String>): Message {
+	val keyboard = InlineKeyboardMarkup()
+	keyboard.keyboard = buttons.map { (text, callbackData) ->
+		val button = InlineKeyboardButton()
+		button.text = text
+		button.callbackData = callbackData
+		listOf(button)
+	}
+	val send = SendMessage(chatId.toString(), text)
+	send.replyMarkup = keyboard
+	return execute(send)
+}
