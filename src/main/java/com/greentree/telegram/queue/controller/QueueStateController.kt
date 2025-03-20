@@ -5,6 +5,9 @@ import com.greentree.telegram.queue.lib.StateController
 import com.greentree.telegram.queue.lib.redirect
 import com.greentree.telegram.queue.lib.text
 import com.greentree.telegram.queue.service.MainService
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery
+
 
 class QueueStateController(
 	val service: MainService,
@@ -24,10 +27,7 @@ class QueueStateController(
 		buttons.put("В главное меню", "main-menu")
 
 		text(service.getQueuePeople(queueId))
-		executeInlineKeyboard("Выберите действие", buttons.keys)
 
-		onCallback {
-			redirect(buttons[it])
-		}
+		choose("Выберите действие", buttons)
 	}
 }

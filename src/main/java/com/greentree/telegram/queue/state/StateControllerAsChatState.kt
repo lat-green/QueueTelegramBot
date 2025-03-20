@@ -42,10 +42,6 @@ data class StateControllerAsChatState(
 						onCallback(callbackQuery.data)
 					}
 					text("Была замечена подозрительная активность. Запуск самоуничтожения")
-					repeat(3) {
-						text((3 - it).toString())
-						sleep(1000)
-					}
 					text("BOOM!!!")
 					redirect("begin")
 				}

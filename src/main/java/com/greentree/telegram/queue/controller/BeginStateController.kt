@@ -1,9 +1,6 @@
 package com.greentree.telegram.queue.controller
 
-import com.greentree.telegram.queue.lib.StateController
-import com.greentree.telegram.queue.lib.nothing
-import com.greentree.telegram.queue.lib.redirect
-import com.greentree.telegram.queue.lib.text
+import com.greentree.telegram.queue.lib.*
 import com.greentree.telegram.queue.service.MainService
 
 class BeginStateController(
@@ -21,8 +18,7 @@ class BeginStateController(
 
 				redirect(next)
 			}
-			text("Введите /start")
-			nothing()
+			redirect("begin")
 		}
 	}
 }
